@@ -20,8 +20,8 @@ use App\Http\Controllers\ImageController;
 // });
 
 
-Route::get('/images/create', 'App\Http\Controllers\ImageController@index')->name('gallery.index');
-Route::get('/', 'App\Http\Controllers\ImageController@create')->name('gallery.create');
+Route::get('/', 'App\Http\Controllers\ImageController@index')->name('gallery.index');
+Route::get('/images/create', 'App\Http\Controllers\ImageController@create')->name('gallery.create');
 Route::post('/images', 'App\Http\Controllers\ImageController@store')->name('gallery.store');
 Route::get('/images/{id}/edit', 'App\Http\Controllers\ImageController@edit')->name('gallery.edit');
 Route::get('/galleryview/{id}', 'App\Http\Controllers\ImageController@galleryview')->name('gallery.view');
