@@ -18,7 +18,7 @@
                 </a>
                 <div class="card-body">
                     <h5 class="card-title">{{ $image->title }}</h5>
-                    <p class="card-text" >{{ $image->tags }}</p>
+                    <p class="card-text" >(! Please Select Image !)</p>
                     <div class="d-flex justify-content-between">
                         <a href="{{ route('gallery.edit', $image->id) }}" class="btn btn-secondary btn-sm">Edit</a>
                         <form action="{{ route('gallery.destroy', $image->id) }}" method="POST">

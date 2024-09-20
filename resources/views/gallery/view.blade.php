@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Gallery</title>
+    <!-- Fancybox CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4/dist/fancybox.css">
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -83,6 +86,27 @@
             font-size: 14px;
             font-style: italic;
         }
+
+        .close-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #808080; /* Grey background */
+            color: white; /* White text */
+            border: none;
+            border-radius: 5px; /* Rounded corners */
+            font-size: 16px; /* Font size */
+            padding: 10px 15px; /* Padding */
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Transition effects */
+            z-index: 9999;
+        }
+
+        .close-btn:hover {
+            background-color: #606060; /* Darker grey on hover */
+            transform: scale(1.05); /* Slightly enlarge on hover */
+        }
     </style>
 </head>
 <body>
@@ -92,19 +116,41 @@
     <div class="gallery-grid">
         @foreach($images as $image)
         <div class="gallery-item">
-        <a data-fancybox="gallery">
-            <img src="{{ $image->image_url }}" class="card-img-top" alt="{{ $image->title }}">
+            <!-- Linking image to Fancybox gallery -->
+            <a href="{{ $image->image_url }}" data-fancybox="gallery" data-caption="{{ $image->title }}">
+                <img src="{{ $image->image_url }}" class="card-img-top" alt="{{ $image->title }}">
             </a>
-            <div class="gallery-overlay">
+            <!-- <div class="gallery-overlay">
                 <h2 class="gallery-title">{{ $image->title }}</h2>
                 <p class="gallery-tags">{{ $image->tag }}</p>
-            </div>
+            </div> -->
         </div>
+        <button class="close-btn" onclick="closeWindow()">X</button>
         @endforeach
-        <!-- Add more images as needed -->
     </div>
 </div>
 
+<!-- Fancybox JS -->
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4/dist/fancybox.umd.js"></script>
+
+<script>
+    // Initialize Fancybox for the gallery
+    Fancybox.bind("[data-fancybox='gallery']", {
+        infinite: true, // Enables previous/next buttons
+        keyboard: true, // Allow navigating with keyboard arrows
+        buttons: [
+            "zoom",
+            "slideShow",
+            "fullScreen",
+            "thumbs",
+            "close"
+        ]
+    });
+
+    function closeWindow() {
+        window.location.href = '/'; // This will work if the tab was opened via JavaScript
+    }
+</script>
+
 </body>
 </html>
-
