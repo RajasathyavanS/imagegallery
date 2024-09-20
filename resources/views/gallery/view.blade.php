@@ -44,7 +44,7 @@
 
         .gallery-item img {
             width: 100%;
-            height: 100%;
+            height: auto; /* Maintain aspect ratio */
             object-fit: cover;
             transition: transform 0.3s ease;
         }
@@ -53,44 +53,27 @@
             transform: scale(1.1);
         }
 
-        .gallery-overlay {
+        .image-info {
             position: absolute;
-            top: 0;
+            bottom: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        .gallery-item:hover .gallery-overlay {
-            opacity: 1;
-        }
-
-        .gallery-title, .gallery-tags {
-            color: #fff;
+            background-color: rgba(0, 0, 0, 0.7); /* Dark overlay */
+            color: white; /* White text */
             text-align: center;
-            margin: 0;
-            padding: 10px 20px;
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 5px;
+            padding: 10px;
+            opacity: 0; /* Initially hidden */
+            transition: opacity 0.3s ease; /* Fade effect */
         }
 
-        .gallery-tags {
-            margin-top: 10px;
-            font-size: 14px;
-            font-style: italic;
+        .gallery-item:hover .image-info {
+            opacity: 1; /* Show on hover */
         }
 
         .close-btn {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            bottom: 20px; /* Move to bottom */
+            right: 20px; /* Keep on the right */
             background-color: #808080; /* Grey background */
             color: white; /* White text */
             border: none;
@@ -101,6 +84,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
             transition: background-color 0.3s ease, transform 0.2s ease; /* Transition effects */
             z-index: 9999;
+            display: block; /* Ensure it's visible initially */
         }
 
         .close-btn:hover {
@@ -116,18 +100,17 @@
     <div class="gallery-grid">
         @foreach($images as $image)
         <div class="gallery-item">
-            <!-- Linking image to Fancybox gallery -->
             <a href="{{ $image->image_url }}" data-fancybox="gallery" data-caption="{{ $image->title }}">
                 <img src="{{ $image->image_url }}" class="card-img-top" alt="{{ $image->title }}">
+                <div class="image-info">
+                    <h3>{{ $image->title }}</h3>
+                    <p>{{ $image->tag }}</p>
+                </div>
             </a>
-            <!-- <div class="gallery-overlay">
-                <h2 class="gallery-title">{{ $image->title }}</h2>
-                <p class="gallery-tags">{{ $image->tag }}</p>
-            </div> -->
         </div>
-        <button class="close-btn" onclick="closeWindow()">X</button>
         @endforeach
     </div>
+    <button class="close-btn" onclick="closeWindow()">Cancel</button>
 </div>
 
 <!-- Fancybox JS -->
@@ -144,11 +127,18 @@
             "fullScreen",
             "thumbs",
             "close"
-        ]
+        ],
+        // Event handlers
+        afterShow: function() {
+            document.querySelector('.close-btn').style.display = 'none'; // Hide close button
+        },
+        afterClose: function() {
+            document.querySelector('.close-btn').style.display = 'block'; // Show close button
+        }
     });
 
     function closeWindow() {
-        window.location.href = '/'; // This will work if the tab was opened via JavaScript
+        window.location.href = '/'; // Redirect to the homepage
     }
 </script>
 
